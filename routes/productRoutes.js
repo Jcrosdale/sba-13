@@ -59,28 +59,29 @@ router.delete('/api/products/:id', async(req, res) => {
 
 // GET /api/products (Read All Products with Advanced Querying)
 router.get('/api/products', async(req, res) => {
-    const pageSize = 10; // Limit = 10
-    // It should retrieve all products
-    Product.find({ 
-        // category: Filter products by a specific category.
-        category: 'Categories',
-        // minPrice: Filter products with a price greater than or equal to this value.
-        minPrice:
-        // maxPrice: Filter products with a price less than or equal to this value.
-        maxPrice: 
-    })
-    // sortBy: Sort results. For example, price_asc for ascending price or price_desc for descending price.
-    .sort({})
-    // page & limit: For pagination (defaulting to page 1, limit 10).
-    .lmit(pageSize)
-    // Respond with an array of the resulting products.
-    .then(list => {
-        console.log('Final list of products:', list);
-    })
-    .catch(err => {
-        console.error('Unable to display list of products', err);
-    });
-})
+    try {
+        const {
+            // page & limit: For pagination (defaulting to page 1, limit 10).
+            category, minPrice, maxPrice, sortBy, page = 1, limit = 10
+        } = req.query;
 
+        // Filter
+        const filter = {};
 
-// Dynamically build the Mongoose query based on which query parameters are provided.
+        // Sort
+        const sort = {};
+        // price_asc for ascending
+        if (sortBy === 'price_asc') sort.price = 1;
+        // price_desc for descending price.
+        if (sortBy === 'price_desc') sort.price = -1;
+
+        const products = await Product.find(filter)
+            .sort(sort)
+            .limit(limit);
+
+        // Respond with an array of the resulting products.
+        res.json(products);
+    } catch (err) {
+        res.status(500).json({ message: 'Unable to display list of products', error: err.message })
+    }
+});
