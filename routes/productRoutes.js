@@ -28,6 +28,18 @@ router.get('/api/products/:id', async (req, res) => {
         res.json(products);
     } catch (err) {
         // If no product is found, responds with a 404 status code.
-        res.status(404)._construct.json(err);
+        res.status(404).json(err);
+    }
+})
+
+// PUT /api/products/:id (Update a Product)
+router.put('/api/products/:id', async(req, res) => {
+    try {
+        // Updates a product by its _id with the data from req.body.
+        // Responds with the updated product data (use the { new: true } option).
+        const products = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    } catch(err) {
+        // If no product is found to update, responds with a 404 status code.
+        res.status(404).json(err);
     }
 })
