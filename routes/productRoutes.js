@@ -1,8 +1,8 @@
 const router = require('express').Router();
 const { Product } = require('../../models');
 
-// POST /api/products - Create a product
-router.post('./api/products', async (req, res) => {
+// POST /api/products (Create a product)
+router.post('/api/products', async (req, res) => {
     try {
         // Creates a new product based on the req.body.
         const product = await Product.create(req.body);
@@ -18,3 +18,16 @@ router.post('./api/products', async (req, res) => {
 
     }
 });
+
+// GET /api/products/:id (Read a Single Product)
+router.get('/api/products/:id', async (req, res) => {
+    try {
+        // Retrieves a single product by its _id
+        const products = await Product.findById(req.params.id);
+        // If the product is found, responds with the product object.
+        res.json(products);
+    } catch (err) {
+        // If no product is found, responds with a 404 status code.
+        res.status(404)._construct.json(err);
+    }
+})
