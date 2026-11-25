@@ -57,4 +57,30 @@ router.delete('/api/products/:id', async(req, res) => {
     }
 })
 
+// GET /api/products (Read All Products with Advanced Querying)
+router.get('/api/products', async(req, res) => {
+    const pageSize = 10; // Limit = 10
+    // It should retrieve all products
+    Product.find({ 
+        // category: Filter products by a specific category.
+        category: 'Categories',
+        // minPrice: Filter products with a price greater than or equal to this value.
+        minPrice:
+        // maxPrice: Filter products with a price less than or equal to this value.
+        maxPrice: 
+    })
+    // sortBy: Sort results. For example, price_asc for ascending price or price_desc for descending price.
+    .sort({})
+    // page & limit: For pagination (defaulting to page 1, limit 10).
+    .lmit(pageSize)
+    // Respond with an array of the resulting products.
+    .then(list => {
+        console.log('Final list of products:', list);
+    })
+    .catch(err => {
+        console.error('Unable to display list of products', err);
+    });
+})
 
+
+// Dynamically build the Mongoose query based on which query parameters are provided.
