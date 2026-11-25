@@ -43,3 +43,18 @@ router.put('/api/products/:id', async(req, res) => {
         res.status(404).json(err);
     }
 })
+
+// DELETE /api/products/:id (Delete a Product)
+router.delete('/api/products/:id', async(req, res) => {
+    try {
+        // Deletes a product by its _id.
+        const products = await Note.findByIdAndDelete(req.params.id);
+        // If successful, responds with a success message.
+        res.json({ message: 'Product successfully deleted.' });
+    } catch(err) {
+        // If no product is found to delete, responds with a 404 status code.
+        res.status(404).json(err);
+    }
+})
+
+
